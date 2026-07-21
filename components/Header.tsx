@@ -59,15 +59,7 @@ export default function Header() {
   const toggle = (l: string) => setExpanded((p) => (p === l ? null : l));
 
   return (
-    <>
-      {/* Offer bar */}
-      <div className="bg-[#C8291D] text-white text-center text-xs py-2 px-4 font-medium tracking-wide">
-        <span className="font-semibold">$150 off</span> a new door &ensp;·&ensp;
-        <span className="font-semibold">$50 off</span> your first repair &ensp;·&ensp;
-        <Link href="/contact-us" className="underline underline-offset-2 opacity-90 hover:opacity-100">Get a free quote →</Link>
-      </div>
-
-      <header className={`sticky top-0 z-50 transition-shadow duration-200 bg-white ${scrolled ? "shadow-card" : "border-b border-gray-100"}`}>
+    <header className={`sticky top-0 z-50 transition-shadow duration-200 bg-white ${scrolled ? "shadow-card" : "border-b border-gray-100"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
 
           {/* Logo — wordmark */}
@@ -160,6 +152,5 @@ export default function Header() {
           </div>
         )}
       </header>
-    </>
   );
 }
