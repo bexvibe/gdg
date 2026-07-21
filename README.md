@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Garage Door Group — Website
 
-## Getting Started
+Next.js 16 (App Router, TypeScript) + Tailwind CSS website for Garage Door Group, North Auckland.
 
-First, run the development server:
+## Stack
+
+- **Framework**: Next.js 16 App Router + TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: Neon (Postgres via `@neondatabase/serverless` + Drizzle ORM)
+- **Email**: Resend
+- **Hosting**: Vercel (recommended) or Netlify
+
+---
+
+## Local development
 
 ```bash
+npm install
+cp .env.example .env.local
+# Edit .env.local and fill in all values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment variables
 
-## Learn More
+Copy `.env.example` to `.env.local` and fill in:
 
-To learn more about Next.js, take a look at the following resources:
+- `DATABASE_URL` — Neon/Supabase Postgres connection string
+- `RESEND_API_KEY` — Resend API key (resend.com)
+- `SENDING_DOMAIN` — Domain to send email from (e.g. `garagedoorgroup.co.nz`)
+- `OWNER_EMAIL` — Owner notification email (chris@gdgroup.co.nz)
+- `ADMIN_PASSWORD` — Password for the /admin panel
+- `NEXT_PUBLIC_BASE_URL` — Full site URL (https://www.garagedoorgroup.co.nz)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Database setup
 
-## Deploy on Vercel
+Run the SQL in `drizzle/0000_create_submissions.sql` in your Neon/Supabase SQL editor, or use `npx drizzle-kit push` (requires DATABASE_URL in environment).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploying to Vercel
+
+1. Push to GitHub
+2. Import the repo in vercel.com
+3. Add all environment variables from `.env.example`
+4. Deploy
+
+Set up HTTPS + www redirect in Vercel Domains settings.
+
+---
+
+## Email setup (Resend + domain verification)
+
+1. Sign up at resend.com
+2. Go to Domains → Add domain → enter `garagedoorgroup.co.nz`
+3. Add the DNS records Resend provides (SPF, DKIM, DMARC)
+4. Wait for verification (5-30 minutes)
+5. Set `SENDING_DOMAIN=garagedoorgroup.co.nz` in environment variables
+
+DNS records to add (Resend provides exact values):
+- TXT `@` — SPF record
+- TXT `resend._domainkey` — DKIM public key
+- TXT `_dmarc` — DMARC policy: `v=DMARC1; p=none; rua=mailto:chris@gdgroup.co.nz`
+
+---
+
+## Admin panel
+
+Access at `/admin` — password set in `ADMIN_PASSWORD` env var.
+
+- Lists all submissions newest-first
+- Search by name, mobile, email or message
+- One-click CSV export
+- Session lasts 8 hours
+
+The Neon/Supabase dashboard is always available as a backup view.
+
+---
+
+## Form submissions
+
+Flow: client → POST /api/contact → validate (Zod) → write to DB → send email → return success.
+
+DB write is the source of truth. If email fails, lead is still saved and user sees success.
+Rate limiting: 5 requests per IP per 15 minutes.
+
+---
+
+## Analytics
+
+No analytics in this build. Add GTM/GA4 snippet to the commented placeholder in `app/layout.tsx`.
+
+---
+
+## Site structure
+
+All original URLs preserved. `/garage-services` (was 404) now 301 redirects to `/garage-services/garage-door-repairs`.
