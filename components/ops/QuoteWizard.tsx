@@ -1233,7 +1233,7 @@ export default function QuoteWizard() {
 
         {/* Nav */}
         {step.key !== "review" && (
-          <div className="fixed bottom-0 left-64 right-0 flex items-center justify-between px-6 py-4 border-t" style={{ borderColor: ops.border, background: "#fff" }}>
+          <div className="fixed bottom-0 left-64 right-0 flex items-center justify-between px-6 py-4 border-t ml-6" style={{ borderColor: ops.border, background: "#fff" }}>
             <button
               type="button"
               onClick={handleBack}
