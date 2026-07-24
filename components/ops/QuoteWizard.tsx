@@ -645,12 +645,15 @@ export default function QuoteWizard() {
       onEdit: () => goToStep(stepIndexOf("size")),
     },
     { label: "Motor", value: motor?.model ?? "—", amount: motor ? autoLines.find((l) => l.key === "motor")?.unitPrice ?? 0 : null, onEdit: () => goToStep(stepIndexOf("motor")) },
-    ...selectedAddons.map((addon) => ({
-      label: addon.label,
-      value: "",
-      amount: sellPrice(addon.cost, marginFraction),
-      onEdit: () => goToStep(stepIndexOf("addons")),
-    })),
+    ...(selectedAddons.length > 0
+      ? [{
+          label: "Add-ons",
+          value: "",
+          addons: selectedAddons,
+          amount: selectedAddons.reduce((sum, a) => sum + sellPrice(a.cost, marginFraction), 0),
+          onEdit: () => goToStep(stepIndexOf("addons")),
+        }]
+      : []),
     {
       label: "Margin",
       value: answers.marginPct ? `${answers.marginPct}%` : "—",
@@ -1121,9 +1124,36 @@ export default function QuoteWizard() {
                         <JobInfoField label="Job location" value={location?.label ?? "—"} onEdit={() => goToStep(stepIndexOf("location"))} />
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10">
-                        {productReviewLines.map((line) => (
-                          <ReviewLine key={line.label} {...line} />
-                        ))}
+                        {productReviewLines.map((line) => {
+                          if ("addons" in line && line.addons) {
+                            return (
+                              <div key={line.label} className="py-2.5 border-b" style={{ borderColor: ops.border }}>
+                                <div className="text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: ops.muted }}>Add-ons</div>
+                                <div className="space-y-1.5">
+                                  {line.addons.map((addon) => (
+                                    <div key={addon.key} className="flex items-center justify-between">
+                                      <span className="text-sm font-semibold" style={{ color: ops.ink }}>{addon.label}</span>
+                                      <span className="text-sm font-bold" style={{ color: ops.ink }}>+{fmt(sellPrice(addon.cost, marginFraction))}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="mt-2 pt-2 border-t flex items-center justify-between" style={{ borderColor: ops.border }}>
+                                  <span className="text-xs font-bold uppercase" style={{ color: ops.muted }}>Total Add-ons</span>
+                                  <span className="text-sm font-bold" style={{ color: ops.ink }}>{fmt(line.amount || 0)}</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={line.onEdit}
+                                  className="mt-2 text-xs font-bold uppercase tracking-wide border rounded-md px-2.5 py-1.5"
+                                  style={{ borderColor: ops.border, color: ops.ink }}
+                                >
+                                  Edit
+                                </button>
+                              </div>
+                            );
+                          }
+                          return <ReviewLine key={line.label} {...line} />;
+                        })}
                       </div>
                     </div>
                   ) : (
