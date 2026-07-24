@@ -954,7 +954,7 @@ export default function QuoteWizard() {
                       className="flex items-center gap-3 border rounded-md px-3 py-2.5 text-sm cursor-pointer transition-colors"
                       style={{ borderColor: checked ? ops.pink : ops.border, background: checked ? ops.pinkSoft : "#fff" }}
                     >
-                      <input type="checkbox" checked={checked} onChange={() => toggleAddon(extra.key)} />
+                      <input type="checkbox" checked={checked} onChange={() => toggleAddon(extra.key)} style={{ accentColor: ops.pink }} />
                       <span className="font-semibold flex-1" style={{ color: ops.ink }}>{extra.label}</span>
                       <span className="text-xs font-bold" style={{ color: ops.muted }}>+{fmt(sellPrice(extra.cost, marginFraction))}</span>
                     </label>
