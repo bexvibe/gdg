@@ -678,7 +678,6 @@ export default function QuoteWizard() {
             <span className="text-xs font-semibold" style={{ color: ops.muted }}>
               Step {stepIndex + 1} of {steps.length}
             </span>
-            <span className="text-xs font-semibold" style={{ color: ops.ink }}>{step.label}</span>
           </div>
           <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: ops.border }}>
             <div
