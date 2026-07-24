@@ -859,7 +859,7 @@ export default function QuoteWizard() {
             <div>
               <StepHeading title="Door size" />
 
-              <div className="max-w-md mb-6 border rounded-lg p-4" style={{ borderColor: ops.border, background: ops.bg }}>
+              <div className="max-w-md mb-6">
                 <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: ops.muted }}>Custom size</p>
                 <div className="flex gap-3 items-end">
                   <div className="flex-1">
@@ -868,7 +868,15 @@ export default function QuoteWizard() {
                       type="number"
                       step="0.01"
                       value={customWidthInput}
-                      onChange={(e) => setCustomWidthInput(e.target.value)}
+                      onChange={(e) => {
+                        setCustomWidthInput(e.target.value);
+                        const width = Number(e.target.value);
+                        const height = Number(customHeightInput);
+                        if (width && height) {
+                          setAnswers((prev) => ({ ...prev, sizeLabel: "", customSize: { width, height } }));
+                          if (!returnToReview) setTimeout(goNext, AUTO_ADVANCE_DELAY);
+                        }
+                      }}
                       className="w-full border rounded-md px-3 py-2 text-sm"
                       style={{ borderColor: ops.border, color: ops.ink, background: "#fff" }}
                     />
@@ -879,34 +887,28 @@ export default function QuoteWizard() {
                       type="number"
                       step="0.01"
                       value={customHeightInput}
-                      onChange={(e) => setCustomHeightInput(e.target.value)}
+                      onChange={(e) => {
+                        setCustomHeightInput(e.target.value);
+                        const width = Number(customWidthInput);
+                        const height = Number(e.target.value);
+                        if (width && height) {
+                          setAnswers((prev) => ({ ...prev, sizeLabel: "", customSize: { width, height } }));
+                          if (!returnToReview) setTimeout(goNext, AUTO_ADVANCE_DELAY);
+                        }
+                      }}
                       className="w-full border rounded-md px-3 py-2 text-sm"
                       style={{ borderColor: ops.border, color: ops.ink, background: "#fff" }}
                     />
                   </div>
-                  <button
-                    type="button"
-                    disabled={!customWidthInput || !customHeightInput}
-                    onClick={() => {
-                      const width = Number(customWidthInput);
-                      const height = Number(customHeightInput);
-                      setAnswers((prev) => ({ ...prev, sizeLabel: "", customSize: { width, height } }));
-                      if (!returnToReview) setTimeout(goNext, AUTO_ADVANCE_DELAY);
-                    }}
-                    className="text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-md disabled:opacity-40 shrink-0"
-                    style={{ background: ops.pink, color: "#fff" }}
-                  >
-                    Use size
-                  </button>
                 </div>
                 {answers.customSize && (
-                  <div className="flex items-center gap-2 mt-3 text-sm font-semibold" style={{ color: ops.ink }}>
-                    <Check className="w-4 h-4" style={{ color: ops.pink }} />
-                    Using custom size: {answers.customSize.width}m x {answers.customSize.height}m
+                  <div className="flex items-center gap-2 mt-3 text-xs font-semibold" style={{ color: ops.ink }}>
+                    <Check className="w-3 h-3" style={{ color: ops.pink }} />
+                    {answers.customSize.width}m × {answers.customSize.height}m
                     <button
                       type="button"
                       onClick={() => setAnswers((prev) => ({ ...prev, customSize: null }))}
-                      className="text-xs underline"
+                      className="text-xs underline ml-auto"
                       style={{ color: ops.muted }}
                     >
                       Clear
