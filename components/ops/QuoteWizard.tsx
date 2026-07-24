@@ -295,8 +295,8 @@ function JobInfoField({ label, value, onEdit }: { label: string; value: string; 
         <button
           type="button"
           onClick={onEdit}
-          className="text-xs font-bold uppercase tracking-wide"
-          style={{ color: ops.pink }}
+          className="text-xs font-bold uppercase tracking-wide border rounded-md px-2.5 py-1.5"
+          style={{ borderColor: ops.border, color: ops.ink }}
         >
           Edit
         </button>
