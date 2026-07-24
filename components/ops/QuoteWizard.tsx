@@ -874,7 +874,6 @@ export default function QuoteWizard() {
                         const height = Number(customHeightInput);
                         if (width && height) {
                           setAnswers((prev) => ({ ...prev, sizeLabel: "", customSize: { width, height } }));
-                          if (!returnToReview) setTimeout(goNext, AUTO_ADVANCE_DELAY);
                         }
                       }}
                       className="w-full border rounded-md px-3 py-2 text-sm"
@@ -893,7 +892,6 @@ export default function QuoteWizard() {
                         const height = Number(e.target.value);
                         if (width && height) {
                           setAnswers((prev) => ({ ...prev, sizeLabel: "", customSize: { width, height } }));
-                          if (!returnToReview) setTimeout(goNext, AUTO_ADVANCE_DELAY);
                         }
                       }}
                       className="w-full border rounded-md px-3 py-2 text-sm"
