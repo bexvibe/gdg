@@ -271,7 +271,7 @@ function ReviewLine({
       </div>
       <div className="flex items-center gap-3 shrink-0">
         <span className="text-sm font-bold w-20 text-right" style={{ color: amount ? ops.ink : ops.muted }}>
-          {amount ? fmt(amount) : amount === 0 ? "Included" : "—"}
+          {amount ? fmt(amount) : ""}
         </span>
         <button
           type="button"
