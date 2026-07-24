@@ -671,7 +671,7 @@ export default function QuoteWizard() {
 
   return (
     <OpsShell title="New quote" actions={saveAndCloseButton}>
-      <div>
+      <div className="pb-24">
         {/* Progress */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -1235,7 +1235,7 @@ export default function QuoteWizard() {
 
         {/* Nav */}
         {step.key !== "review" && (
-          <div className="flex items-center justify-between mt-8 pt-6 border-t" style={{ borderColor: ops.border }}>
+          <div className="fixed bottom-0 left-0 right-0 flex items-center justify-between px-6 py-4 border-t" style={{ borderColor: ops.border, background: "#fff" }}>
             <button
               type="button"
               onClick={handleBack}
