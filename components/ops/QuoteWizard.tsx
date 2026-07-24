@@ -933,10 +933,7 @@ export default function QuoteWizard() {
               <OptionGrid
                 columns={2}
                 value={answers.motorModel}
-                onChange={(id) => {
-                  set("motorModel", id);
-                  if (id === NO_MOTOR.model && !returnToReview) setTimeout(goNext, AUTO_ADVANCE_DELAY);
-                }}
+                onChange={(id) => chooseAndAdvance("motorModel", id)}
                 options={[NO_MOTOR, ...(doorClass?.motors ?? [])].map((m) => ({ id: m.model, label: m.model }))}
               />
             </div>
