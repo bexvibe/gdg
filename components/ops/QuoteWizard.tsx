@@ -1033,7 +1033,7 @@ export default function QuoteWizard() {
                     className="text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-md transition-colors"
                     style={{ background: reviewMode === mode ? ops.pink : "transparent", color: reviewMode === mode ? "#fff" : ops.muted }}
                   >
-                    {mode === "edit" ? "Edit selections" : "Customer preview"}
+                    {mode === "edit" ? "Review" : "Preview quote"}
                   </button>
                 ))}
               </div>
