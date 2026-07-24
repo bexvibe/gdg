@@ -645,13 +645,12 @@ export default function QuoteWizard() {
       onEdit: () => goToStep(stepIndexOf("size")),
     },
     { label: "Motor", value: motor?.model ?? "—", amount: motor ? autoLines.find((l) => l.key === "motor")?.unitPrice ?? 0 : null, onEdit: () => goToStep(stepIndexOf("motor")) },
-    {
-      label: "Add-ons",
-      value: selectedAddons.length ? `${selectedAddons.length} selected` : "—",
-      sub: selectedAddons.length ? selectedAddons.map((a) => a.label).join(", ") : undefined,
-      amount: selectedAddons.length ? selectedAddons.reduce((sum, a) => sum + sellPrice(a.cost, marginFraction), 0) : null,
+    ...selectedAddons.map((addon) => ({
+      label: addon.label,
+      value: "",
+      amount: sellPrice(addon.cost, marginFraction),
       onEdit: () => goToStep(stepIndexOf("addons")),
-    },
+    })),
     {
       label: "Margin",
       value: answers.marginPct ? `${answers.marginPct}%` : "—",
